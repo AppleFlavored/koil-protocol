@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Koil Protocol</title>
+        <link rel="stylesheet" href="web/global.css" type="text/css">
+    </head>
+    <body>
+        <nav class="navbar">
+            koil protocol docs
+            <a href="https://github.com/AppleFlavored/rayproto">
+                <img alt="Github repository" src="web/github-mark.svg" class="icon" />
+            </a>
+        </nav>
+        <main>
+            <header>
+                <h1>Koil Protocol</h1>
+                <p>
+                    This is the documentation for the multiplayer protocol of <a href="https://github.com/tsoding/koil">Koil</a>, a game by tsoding.
+                    The goal of this project is to allow others to create alternative clients or servers using the same network protocol of the original game. Or, you can use the
+                    protocol as a foundation for your own multiplayer game.
+                </p>
+                <div class="note error">
+                    <b>Note!</b> The protocol can change at <u>any time</u>. This documentation is valid as of the commit <a href="https://github.com/tsoding/koil/commit/319a33dd39f7202600bcc3b72c0cce3d6004bb95">319a33dd39</a>.
+                </div>
+            </header>
+            <section>
+                <h2 id="data-types">Data Types</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Type</th>
+                            <th scope="col">Size (in bytes)</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>uint8</td>
+                            <td>1</td>
+                            <td>8-bit unsigned integer</td>
+                        </tr>
+                        <tr>
+                            <td>uint16</td>
+                            <td>2</td>
+                            <td>Big-endian 16-bit unsigned integer</td>
+                        </tr>
+                        <tr>
+                            <td>uint32</td>
+                            <td>4</td>
+                            <td>Big-endian 32-bit unsigned integer</td>
+                        </tr>
+                        <tr>
+                            <td>float32</td>
+                            <td>4</td>
+                            <td>Big-endian 32-bit floating point number</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h2 id="messages">Messages</h2>
+                <p>Messages are sent between the client and server through a WebSocket connection using a binary format. Each message is prepended with a <code>uint8</code> field for the message type.</p>
+            </section>
+            <section>
+                <h3 id="messages:hello">Hello <span class="message-id">0x01</span></h3>
+                <p>The Hello message is sent by the server when a client connects to the server.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="5">0x01</td>
+                            <td>Player ID</td>
+                            <td>uint32</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>X</td>
+                            <td>float32</td>
+                            <td>The x-coord of the player's spawn position.</td>
+                        </tr>
+                        <tr>
+                            <td>Y</td>
+                            <td>float32</td>
+                            <td>The y-coord of the player's spawn position.</td>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>float32</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Hue</td>
+                            <td>uint8</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3 id="messages:player-joined">PlayerJoined <span class="message-id">0x02</span></h3>
+                <p>The PlayerJoined message is sent by the server when a new player joins the game.</p>
+            </section>
+            <section>
+                <h3 id="messages:player-left">PlayerLeft <span class="message-id">0x03</span></h3>
+                <p>The PlayerLeft message is sent by the server when a player leaves the game.</p>
+            </section>
+            <section>
+                <h3 id="messages:player-moving">PlayerMoving <span class="message-id">0x04</span></h3>
+                <p>The PlayerMoving message is sent by the server to update a player's position and direction.</p>
+            </section>
+            <section>
+                <h3 id="messages:amma-moving">AmmaMoving <span class="message-id">0x05</span></h3>
+                <p>The AmmaMoving message is sent by the client when it wants to move.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2">0x05</td>
+                            <td>Direction</td>
+                            <td>uint8</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Start</td>
+                            <td>uint8</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3 id="messages:amma-throwing">AmmaThrowing <span class="message-id">0x06</span></h3>
+                <p>The AmmaMoving message is sent by the client when it wants to throw a bomb.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="1">0x06</td>
+                            <td colspan="3"><i>No fields.</i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3 id="messages:ping">Ping <span class="message-id">0x07</span></h3>
+                <p>The AmmaMoving message is sent by the client to calculate the latency between the client and server.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="1">0x07</td>
+                            <td>Timestamp</td>
+                            <td>uint32</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3 id="messages:pong">Pong <span class="message-id">0x08</span></h3>
+                <p>The Pong message is sent by the server as a response to a <a href="#messages:ping">Ping</a> message.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="1">0x08</td>
+                            <td>Timestamp</td>
+                            <td>uint32</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3 id="messages:item-spawned">ItemSpawned <span class="message-id">0x09</span></h3>
+                <p>The ItemSpawned message is sent by the server when an item spawns in the level.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4">0x09</td>
+                            <td>Item Kind</td>
+                            <td>uint8</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Index</td>
+                            <td>uint32</td>
+                            <td>A unique index to identify the item in the level.</td>
+                        </tr>
+                        <tr>
+                            <td>X</td>
+                            <td>float32</td>
+                            <td>The x-coord of the item's position.</td>
+                        </tr>
+                        <tr>
+                            <td>Y</td>
+                            <td>float32</td>
+                            <td>The y-coord of the item's position.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3 id="messages:item-collected">ItemCollected <span class="message-id">0x0A</span></h3>
+                <p>The ItemCollected message is sent by the server when an item is picked up.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="1">0x0A</td>
+                            <td>Index</td>
+                            <td>uint32</td>
+                            <td>A unique index to identify the item in the level.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3 id="messages:bomb-spawned">BombSpawned <span class="message-id">0x0B</span></h3>
+                <p>The BombSpawned message is sent by the server when a bomb is spawned in the game.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="8">0x0B</td>
+                            <td>Index</td>
+                            <td>uint32</td>
+                            <td>A unique index to identify the bomb.</td>
+                        </tr>
+                        <tr>
+                            <td>X</td>
+                            <td>float32</td>
+                            <td>The x-coord of the bomb's starting position.</td>
+                        </tr>
+                        <tr>
+                            <td>Y</td>
+                            <td>float32</td>
+                            <td>The y-coord of the bomb's starting position.</td>
+                        </tr>
+                        <tr>
+                            <td>Z</td>
+                            <td>float32</td>
+                            <td>The z-coord of the bomb's starting position.</td>
+                        </tr>
+                        <tr>
+                            <td>Delta X</td>
+                            <td>float32</td>
+                            <td>The x-coord of the bomb's velocity.</td>
+                        </tr>
+                        <tr>
+                            <td>Delta Y</td>
+                            <td>float32</td>
+                            <td>The y-coord of the bomb's velocity.</td>
+                        </tr>
+                        <tr>
+                            <td>Delta Z</td>
+                            <td>float32</td>
+                            <td>The z-coord of the bomb's velocity.</td>
+                        </tr>
+                        <tr>
+                            <td>Lifetime</td>
+                            <td>float32</td>
+                            <td>The time in milliseconds before the bomb explodes.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <h3 id="messages:bomb-exploded">BombExploded <span class="message-id">0x0C</span></h3>
+                <p>The BombExploded message is sent by the server when a bomb explodes.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4">0x0C</td>
+                            <td>Index</td>
+                            <td>uint32</td>
+                            <td>A unique index to identify the exploding bomb.</td>
+                        </tr>
+                        <tr>
+                            <td>X</td>
+                            <td>float32</td>
+                            <td>The x-coord of the explosion.</td>
+                        </tr>
+                        <tr>
+                            <td>Y</td>
+                            <td>float32</td>
+                            <td>The y-coord of the explosion.</td>
+                        </tr>
+                        <tr>
+                            <td>Z</td>
+                            <td>float32</td>
+                            <td>The z-coord of the explosion.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+        <footer>
+            <p>This website and its content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International</a>.
+        </footer>
+    </body>
+</html>
