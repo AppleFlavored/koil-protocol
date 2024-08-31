@@ -60,6 +60,55 @@
                 </table>
             </section>
             <section>
+                <h2 id="structures">Structures</h2>
+                <p>Repeating message fields have been factored out into separate structures.</p>
+            </section>
+            <section>
+                <h3 id="structures:player-struct">PlayerStruct</h3>
+                <p>The PlayerStruct structure is used by the <a href="#messages:player-joined">PlayerJoined</a> and <a href="#messages:player-moving">PlayerMoving</a> messages.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Player ID</td>
+                            <td>uint32</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>X</td>
+                            <td>float32</td>
+                            <td>The x-coord of the player's position.</td>
+                        </tr>
+                        <tr>
+                            <td>Y</td>
+                            <td>float32</td>
+                            <td>The y-coord of the player's position.</td>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>float32</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Hue</td>
+                            <td>uint8</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Moving</td>
+                            <td>uint8</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>
                 <h2 id="messages">Messages</h2>
                 <p>Messages are sent between the client and server through a WebSocket connection using a binary format. Each message is prepended with a <code>uint8</code> field for the message type.</p>
             </section>
@@ -108,14 +157,68 @@
             <section>
                 <h3 id="messages:player-joined">PlayerJoined <span class="message-id">0x02</span></h3>
                 <p>The PlayerJoined message is sent by the server when a new player joins the game.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="1">0x02</td>
+                            <td>PlayerStructs</td>
+                            <td><a href="#structures:player-struct">PlayerStruct</a>[count]</td>
+                            <td>count = (byte_length(message) - 1)/sizeof(PlayerStruct)</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
             <section>
                 <h3 id="messages:player-left">PlayerLeft <span class="message-id">0x03</span></h3>
                 <p>The PlayerLeft message is sent by the server when a player leaves the game.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="1">0x03</td>
+                            <td>Player IDs</td>
+                            <td>uint32[count]</td>
+                            <td>count = (byte_length(message) - 1)/sizeof(uint32)</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
             <section>
                 <h3 id="messages:player-moving">PlayerMoving <span class="message-id">0x04</span></h3>
                 <p>The PlayerMoving message is sent by the server to update a player's position and direction.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Message ID</th>
+                            <th scope="col">Field</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="1">0x04</td>
+                            <td>PlayerStructs</td>
+                            <td><a href="#structures:player-struct">PlayerStruct</a>[count]</td>
+                            <td>count = (byte_length(message) - 1)/sizeof(PlayerStruct)</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
             <section>
                 <h3 id="messages:amma-moving">AmmaMoving <span class="message-id">0x05</span></h3>
