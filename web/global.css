@@ -29,6 +29,10 @@ p {
     margin-bottom: 0.5rem;
 }
 
+a {
+    color: #002fff;
+}
+
 table {
     border-collapse: collapse;
     border: 1px solid var(--border-gray);
